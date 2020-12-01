@@ -117,9 +117,12 @@ sales.post("/",async(req,res)=>{
             res.status(200).send(doc)        
                     
         }
-    })
-    
+    })   
 
+
+})
+
+sales.delete("/",async(req,res)=>{
 
 })
 
