@@ -1,9 +1,10 @@
 const sales = require('express').Router()
 const salesSchema = require('../schema/Sales')
-const tempitem = require('../schema/TempItem')
+const tempitemSchema = require('../schema/TempItem')
+const goodsSchema = require('../schema/Goods')
 
 sales.get("/tempitem",async(req,res)=>{
-    const data = await tempitem.find()
+    const data = await tempitemSchema.find()
     if(data){
         res.status(200).send(data)
     }
@@ -42,7 +43,7 @@ sales.post("/tempitem",async(req,res)=>{
 
     } 
 
-    const insert = await new tempitem(postdata)
+    const insert = await new tempitemSchema(postdata)
     insert.save((err,doc)=>{
         if(doc){
             res.status(200).send(doc)
@@ -57,7 +58,7 @@ sales.post("/tempitem",async(req,res)=>{
 })
 
 sales.delete("/tempitem",async(req,res)=>{
-    const deleteData = await tempitem.deleteOne({_id:req.query.id})
+    const deleteData = await tempitemSchema.deleteOne({_id:req.query.id})
     console.log(deleteData,req.query)
     if(deleteData){
         res.status(200).send(deleteData)
@@ -65,6 +66,60 @@ sales.delete("/tempitem",async(req,res)=>{
     else{
         res.status(404).send("Error")
     }
+    
+})
+
+sales.post("/",async(req,res)=>{
+    const {payment,billingAddress,shippingAddress} = req.body
+    // console.log(payment,billingAddress,shippingAddress)
+
+
+    const tempdata = await tempitemSchema.find()
+    const salesdata = await salesSchema.find()
+    
+
+    var total=0, totalgst=0, nop=0, invoicenumber= salesdata.length 
+
+    for(x of tempdata){
+        const {withdisc,gstAmount} = x
+        total +=withdisc
+        totalgst +=gstAmount
+        nop +=1
+
+        let item = await goodsSchema.findOne({product:x.product})
+        let newAvailable = item.available - x.qt
+
+        let update = await goodsSchema.updateOne({product:x.product}, {$set:{available:newAvailable}})   
+        
+
+    }
+
+    const insertData = {
+        bill:billingAddress,
+        ship:shippingAddress,
+        total:total,
+        gst:totalgst,
+        invoicenumber:invoicenumber,
+        payment:payment,
+        numofproduct:nop,
+        status:"Success",
+        items:tempdata
+    }
+
+    const insert = await new salesSchema(insertData)
+    insert.save(async(err,doc)=>{
+        if(err){
+            res.status(404).send(err)
+            console.log("sales",err)
+        }
+        if(doc){            
+            const deleteTemp = await tempitemSchema.deleteMany()
+            res.status(200).send(doc)        
+                    
+        }
+    })
+    
+
 
 })
 
