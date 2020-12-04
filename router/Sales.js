@@ -105,7 +105,7 @@ sales.post("/", async (req, res) => {
         invoicenumber: invoicenumber,
         payment: payment,
         numofproduct: nop,
-        status: "Success",
+        success: true,
         items: tempdata
     }
 
@@ -165,9 +165,50 @@ sales.delete("/", async (req, res) => {
         else{
             res.status(404).send("Bill not Delete")
         }
+    }  
+    
+
+})
+
+sales.put("/", async (req, res) => {
+    const {id} = req.body
+    console.log(id)
+    
+    const salesData = await salesSchema.findOne({_id:id})
+    const {items} = salesData
+
+    console.log(id,items)
+
+    var complete = 0
+    
+
+    for(x of items){
+        const {product,qt} = x
+        const goods = await goodsSchema.findOne({product:product})
+        const {available} = goods
+        let newAvailable = available + qt
+        
+        let update = await goodsSchema.updateOne({product:product},{$set:{available:newAvailable}})    
+        
+        if(update.ok === 1){
+            complete +=1 
+            console.log("complete",complete)
+        }
+        else{
+            res.status(404).send("Something Wrong")
+        }
     }
 
-    
+    if(items.length === complete){
+        const update = await salesSchema.updateOne({_id:id},{$set:{success:false}}) 
+        if(update.ok === 1){
+            res.status(200).send("Bill Return")
+            console.log(update)
+        }
+        else{
+            res.status(404).send("Bill not Return")
+        }
+    }  
     
 
 })

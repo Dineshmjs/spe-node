@@ -88,8 +88,9 @@ const sales = mongoose.Schema({
         type: Number,
         required: true
     },
-    status: {
-        type: String
+    success: {
+        type: Boolean,
+        required:true
     },
     items:{
         type:Array,
