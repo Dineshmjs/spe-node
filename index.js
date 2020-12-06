@@ -30,8 +30,8 @@ app.use("/purches",purches)
 app.use("/buyeraddress",buyerAddress)
 app.use("/tempitem",tempitem)
 
-// const url ="mongodb+srv://root:dineshmjs@cluster0-y8uer.gcp.mongodb.net/spe"
-const url = "mongodb://localhost:27017/spe" 
+const url ="mongodb+srv://root:dineshmjs@cluster0-y8uer.gcp.mongodb.net/spe"
+// const url = "mongodb://localhost:27017/spe" 
 
 mongoose.connect(url,{ useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify : false  },(err)=>{
     if(!err){
