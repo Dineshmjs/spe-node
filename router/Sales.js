@@ -11,7 +11,6 @@ sales.get("/",async(req,res)=>{
 
 sales.post("/", async (req, res) => {
     const { payment, billingAddress, shippingAddress } = req.body
-    // console.log(payment,billingAddress,shippingAddress)
 
 
     const tempdata = await tempitemSchema.find()
@@ -52,7 +51,6 @@ sales.post("/", async (req, res) => {
     insert.save(async (err, doc) => {
         if (err) {
             res.status(404).send(err)
-            console.log("sales", err)
         }
         if (doc) {
             const deleteTemp = await tempitemSchema.deleteMany()
@@ -84,7 +82,6 @@ sales.delete("/", async (req, res) => {
         
         if(update.ok === 1){
             complete +=1 
-            console.log("complete",complete)
         }
         else{
             res.status(404).send("Something Wrong")
@@ -95,7 +92,6 @@ sales.delete("/", async (req, res) => {
         const deleteSale = await salesSchema.deleteOne({_id:id}) 
         if(deleteSale.ok === 1){
             res.status(200).send("Bill Deleted")
-            console.log(deleteSale)
         }
         else{
             res.status(404).send("Bill not Delete")
@@ -107,12 +103,12 @@ sales.delete("/", async (req, res) => {
 
 sales.put("/", async (req, res) => {
     const {id} = req.body
-    console.log(id)
+   
     
     const salesData = await salesSchema.findOne({_id:id})
     const {items} = salesData
 
-    console.log(id,items)
+   
 
     var complete = 0
     
@@ -127,7 +123,6 @@ sales.put("/", async (req, res) => {
         
         if(update.ok === 1){
             complete +=1 
-            console.log("complete",complete)
         }
         else{
             res.status(404).send("Something Wrong")
@@ -138,7 +133,6 @@ sales.put("/", async (req, res) => {
         const update = await salesSchema.updateOne({_id:id},{$set:{success:false}}) 
         if(update.ok === 1){
             res.status(200).send("Bill Return")
-            console.log(update)
         }
         else{
             res.status(404).send("Bill not Return")

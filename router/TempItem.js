@@ -42,7 +42,6 @@ tempitem.post("/", async (req, res) => {
         withdisc: withdisc
 
     }
-    console.log(postdata)
 
     const insert = await new tempitemSchema(postdata)
     insert.save((err, doc) => {
@@ -55,12 +54,10 @@ tempitem.post("/", async (req, res) => {
     })
 
 
-    // console.log(input, custom, postdata)
 })
 
 tempitem.delete("/", async (req, res) => {
     const deleteData = await tempitemSchema.deleteOne({ _id: req.query.id })
-    // console.log(deleteData, req.query)
     if (deleteData) {
         res.status(200).send(deleteData)
     }

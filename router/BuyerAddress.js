@@ -2,15 +2,14 @@ const buyeraddress = require('express').Router()
 const buyeraddressSchema = require('../schema/BuyerAddress')
 
 buyeraddress.post("/", async (req, res) => {
-    // console.log("buyeraddress", req.body)
+    
     const data = await new buyeraddressSchema(req.body)
     await data.save((err, doc) => {
-        if (err) {
-            // console.log(err)
+        if (err) {            
             res.status(404).send(err)
         }
         if (doc) {
-            // console.log(doc)
+            
             res.status(200).send(doc)
         }
     })
@@ -27,7 +26,7 @@ buyeraddress.get("/", async (req, res) => {
 })
 
 buyeraddress.put("/", async (req, res) => {
-    // console.log("buyeraddress", req.body)
+   
     const { _id, __v, ...data } = req.body
 
     const find = {
@@ -40,7 +39,7 @@ buyeraddress.put("/", async (req, res) => {
     const updateData = await buyeraddressSchema.updateOne(find, update)
 
     if (updateData) {
-        // console.log(updateData)
+        
         res.status(200).send(updateData)
     }
 

@@ -4,15 +4,15 @@ const addressSchema = require('../schema/Address')
 
 
 address.post("/", async (req, res) => {
-    // console.log("address", req.body)
+    
     const data = await new addressSchema(req.body)
     await data.save((err, doc) => {
         if (err) {
-            // console.log(err)
+           
             res.status(404).send(err)
         }
         if (doc) {
-            // console.log(doc)
+            
             res.status(200).send(doc)
         }
     })
@@ -29,7 +29,7 @@ address.get("/", async (req, res) => {
 })
 
 address.put("/", async (req, res) => {
-    // console.log("address", req.body)
+    
     const { _id, __v, ...data } = req.body
 
     const find = {
@@ -42,7 +42,7 @@ address.put("/", async (req, res) => {
     const updateData = await addressSchema.updateOne(find, update)
 
     if (updateData) {
-        // console.log(updateData)
+       
         res.status(200).send(updateData)
     }
 

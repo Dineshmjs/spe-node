@@ -42,8 +42,6 @@ purches.post("/", async (req, res) => {
         items: tempdata
     }
 
-    // console.log("postdata",insertData)
-
 
 
     const insert = await new purchesSchema(insertData)
@@ -52,7 +50,6 @@ purches.post("/", async (req, res) => {
     insert.save(async (err, doc) => {
         if (err) {
             res.status(404).send(err)
-            console.log("purches", err)
         }
         if (doc) {
             const deleteTemp = await tempitemSchema.deleteMany()
@@ -84,7 +81,6 @@ purches.delete("/", async (req, res) => {
         
         if(update.ok === 1){
             complete +=1 
-            console.log("complete",complete)
         }
         else{
             res.status(404).send("Something Wrong")
@@ -95,7 +91,6 @@ purches.delete("/", async (req, res) => {
         const deleteSale = await purchesSchema.deleteOne({_id:id}) 
         if(deleteSale.ok === 1){
             res.status(200).send("Bill Deleted")
-            console.log(deleteSale)
         }
         else{
             res.status(404).send("Bill not Delete")
@@ -107,12 +102,9 @@ purches.delete("/", async (req, res) => {
 
 purches.put("/", async (req, res) => {
     const {id} = req.body
-    console.log(id)
     
     const purchesData = await purchesSchema.findOne({_id:id})
     const {items} = purchesData
-
-    console.log(id,items)
 
     var complete = 0
     
@@ -127,7 +119,6 @@ purches.put("/", async (req, res) => {
         
         if(update.ok === 1){
             complete +=1 
-            console.log("complete",complete)
         }
         else{
             res.status(404).send("Something Wrong")
@@ -137,8 +128,7 @@ purches.put("/", async (req, res) => {
     if(items.length === complete){
         const update = await purchesSchema.updateOne({_id:id},{$set:{success:false}}) 
         if(update.ok === 1){
-            res.status(200).send("Bill Return")
-            console.log(update)
+            res.status(200).send("Bill Return")         
         }
         else{
             res.status(404).send("Bill not Return")

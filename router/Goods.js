@@ -12,9 +12,7 @@ goods.get("/",async(req,res)=>{
 
 
 goods.post("/",async(req,res)=>{
-    console.log(req.body)
     
-
     const insert = await new goodsSchema({
         qt:0,
         ...req.body
@@ -22,11 +20,11 @@ goods.post("/",async(req,res)=>{
 
     await insert.save((err,doc)=>{
         if(doc){
-            // console.log(doc)
+            
             res.status(200).send(doc)
         }
         if(err){
-            console.log(err)
+            
             res.status(404).send(err)
         }
     })
@@ -49,12 +47,12 @@ goods.put("/",async(req,res)=>{
         $set:data
     }
 
-    // console.log(data)
+    
 
     const updateResponse = await goodsSchema.updateOne(find,update)
 
     if(updateResponse){
-        // console.log(updateResponse)
+        
         res.status(200).send(updateResponse)
     }
    
@@ -72,8 +70,7 @@ goods.delete("/",async(req,res)=>{
 
 
 goods.get("/searchProduct",async(req,res)=>{    
-    const data =await goodsSchema.findOne({product:{$regex : req.query.product}})  
-    // console.log(data)  
+    const data =await goodsSchema.findOne({product:{$regex : req.query.product}})     
     res.send(data)
 })
 
