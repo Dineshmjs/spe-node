@@ -71,4 +71,3 @@ address.delete("/tempaddress",async(req,res)=>{
 
 module.exports = address
 
-module.exports = address
