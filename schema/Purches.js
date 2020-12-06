@@ -1,21 +1,38 @@
 const mongoose = require('mongoose')
 
 const purches = mongoose.Schema({
-    name:{
-        type: String,
+    buyer:{
+        type: Object,
         required: true
     },
     invoicenumber:{
-        type: Number,
+        type: String,
         required: true
     },
     invoicedate:{
-        type: Date,
-        default: Date.now()
+        type: String,
+        required:true
     },
+    payment:{
+        type:String,
+        required:true
+    },
+
     numofproduct:{
         type: Number,
         required: true
+    },
+    total:{
+        type:Number,
+        required:true
+    },
+    gst:{
+        type:Number,
+        required:true
+    },
+    success:{
+        type: Boolean,
+        required:true
     },
     items:{
         type:Array,
